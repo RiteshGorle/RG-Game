@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bouncing Ball Game</title>
+
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%=>  WebSite page Name: Bouncing Ball Game <=%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%=>     Made by: Ritesh Gorle              <=%%%%%%%%%%%%%%%%%%%%%%%%%%%%%--> 
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%=>     Created: Nov 2023                  <=%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+<!--%%%%%%%%%%%%%%%%%%%%%%%%%%=>     Content: Ball Game                 <=%%%%%%%%%%%%%%%%%%%%%%%%%%%%%-->
+
+
+  <style>
+    canvas {
+      background: url('game.jpg');
+      background-size: cover;
+      border: 1px solid #000;
+      display: block;
+      margin: 20px auto;
+    }
+    button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+<h3 align="center">This Game is Created by Ritesh Gorle</h3>
+
+
+  <canvas id="gameCanvas" width="600" height="400"></canvas>
+  <button id="resetButton">Reset</button>
+
+  <script>
+    // Get the canvas element and its 2D drawing context
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    // Ball properties
+    let ball = {
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      radius: 10,
+      speedX: 3,
+      speedY: 3,
+    };
+
+    let bounceCount = 0;
+
+    // Reset button functionality
+    const resetButton = document.getElementById('resetButton');
+    resetButton.addEventListener('click', function() {
+      bounceCount = 0;
+    });
+
+    // Function to draw the ball
+    function drawBall() {
+      ctx.beginPath();
+      ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+      ctx.fillStyle = '#FF0000';
+      ctx.fill();
+      ctx.closePath();
+    }
+
+    // Function to update the ball's position
+    function updateBall() {
+      ball.x += ball.speedX;
+      ball.y += ball.speedY;
+
+      // Bounce off the canvas boundaries
+      if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
+        ball.speedX = -ball.speedX;
+        bounceCount++;
+      }
+      if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+        ball.speedY = -ball.speedY;
+        bounceCount++;
+      }
+    }
+
+    // Function to clear and update the canvas
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawBall();
+      updateBall();
+
+      requestAnimationFrame(draw);
+    }
+
+    // Event listener for mouse click
+    canvas.addEventListener('click', function(event) {
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = event.clientX - rect.left;
+      const mouseY = event.clientY - rect.top;
+
+      ball.x = mouseX;
+      ball.y = mouseY;
+    });
+
+    draw(); // Start the game loop
+  </script>
+</body>
+</html>
